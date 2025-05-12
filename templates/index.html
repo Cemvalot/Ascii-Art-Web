@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Art Generator</title>
+    <link rel="stylesheet" href="/static/css/dark.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="container">
+            <h1>ASCII Art Generator</h1>
+            <form action="/generate" method="post" id="ascii-form">
+                <div class="form-group">
+                    <textarea 
+                        name="inputText" 
+                        id="inputText" 
+                        rows="4" 
+                        required 
+                        placeholder="Enter your text here..."
+                    ></textarea>
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="radio-button-container">
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="standard" name="banner" value="standard" checked>
+                            <label class="radio-button__label" for="standard">
+                                <span class="radio-button__custom"></span>
+                                Standard
+                            </label>
+                        </div>
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="shadow" name="banner" value="shadow">
+                            <label class="radio-button__label" for="shadow">
+                                <span class="radio-button__custom"></span>
+                                Shadow
+                            </label>
+                        </div>
+                        <div class="radio-button">
+                            <input type="radio" class="radio-button__input" id="thinkertoy" name="banner" value="thinkertoy">
+                            <label class="radio-button__label" for="thinkertoy">
+                                <span class="radio-button__custom"></span>
+                                Thinkertoy
+                            </label>
+                        </div>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <button type="submit" class="button">
+                    <span class="button-text">Generate</span>
+                </button>
+                <button type="button" class="button" id="luminanceBtn">
+                    <span class="button-text">Random Color</span>
+                </button>
+            </form>
+
+            {{if .Art}}
+            <div class="output-area">
+                <div class="output-header">
+                    <h2>Your ASCII Art:</h2>
+                    <!-- New button and radio buttons for downloading ASCII Art -->
+                    <form action="/export" method="get">
+                        <div class="radio-button-container">
+                            <label class="radio-button">
+                                <input type="radio" name="format" value="txt" class="radio-button__input" checked />
+                                <span class="radio-button__label">
+                                    <span class="radio-button__custom"></span>
+                                    Text (.txt)
+                                </span>
+                            </label>
+                            <label class="radio-button">
+                                <input type="radio" name="format" value="json" class="radio-button__input" />
+                                <span class="radio-button__label">
+                                    <span class="radio-button__custom"></span>
+                                    JSON (.json)
+                                </span>
+                            </label>
+                            <label class="radio-button">
+                                <input type="radio" name="format" value="xml" class="radio-button__input" />
+                                <span class="radio-button__label">
+                                    <span class="radio-button__custom"></span>
+                                    XML (.xml)
+                                </span>
+                            </label>
+                        </div>
+                        <button type="submit" class="download-button">Download</button>
+                    </form>
+                </div>
+                <textarea class="output-textarea" readonly>{{.Art}}</textarea>
+            </div>
+            {{end}}  
+            <div class="loading-overlay">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('ascii-form');
+            const button = form.querySelector('.button');
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            const outputArea = document.querySelector('.output-area');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                
+                button.classList.add('loading');
+                loadingOverlay.classList.add('show');
+                
+                fetch('/generate', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(text);
+                        });
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newOutput = doc.querySelector('.output-area');
+                    
+                    if (newOutput) {
+                        if (outputArea) {
+                            outputArea.replaceWith(newOutput);
+                        } else {
+                            form.insertAdjacentElement('afterend', newOutput);
+                        }
+                        newOutput.classList.add('show');
+                    }
+                    
+                    button.classList.add('success');
+                })
+                .catch(error => {
+                    const inputGroup = form.querySelector('.form-group');
+                    const errorMessage = inputGroup.querySelector('.error-message');
+                    errorMessage.textContent = error.message;
+                    errorMessage.classList.add('show');
+                    inputGroup.classList.add('error');
+                })
+                .finally(() => {
+                    button.classList.remove('loading');
+                    loadingOverlay.classList.remove('show');
+                    setTimeout(() => button.classList.remove('success'), 500);
+                });
+            });
+
+            // Copy button functionality
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('copy-button')) {
+                    const textarea = e.target.closest('.output-area').querySelector('.output-textarea');
+                    textarea.select();
+                    document.execCommand('copy');
+                    
+                    const originalText = e.target.textContent;
+                    e.target.textContent = 'Copied!';
+                    setTimeout(() => e.target.textContent = originalText, 2000);
+                }
+            });
+
+            // Error message handling
+            document.querySelectorAll('textarea').forEach(element => {
+                element.addEventListener('input', function() {
+                    const errorMessage = this.closest('.form-group').querySelector('.error-message');
+                    if (errorMessage) {
+                        errorMessage.classList.remove('show');
+                    }
+                });
+            });
+            // Add to your script section
+document.getElementById('luminanceBtn').addEventListener('click', function() {
+    const textarea = document.querySelector('.output-textarea');
+    const randomColor = `rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`;
+    textarea.style.color = randomColor;
+});
+
+function getLuminance(r, g, b) {
+    let [rs, gs, bs] = [r, g, b].map(c => {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+        });
+        
+    </script>
+</body>
+</html>

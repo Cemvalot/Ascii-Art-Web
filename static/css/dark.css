@@ -1,0 +1,398 @@
+/* dark.css */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #121212;
+    background: linear-gradient(
+        135deg,
+        #121212 25%,
+        #1a1a1a 25%,
+        #1a1a1a 50%,
+        #121212 50%,
+        #121212 75%,
+        #1a1a1a 75%,
+        #1a1a1a
+    );
+    background-size: 40px 40px;
+    animation: move 4s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 40px 40px;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+h1, h2 {
+    color: mediumspringgreen;
+}
+
+form {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    resize: none;
+    overflow: auto;
+    display: block;
+    margin: 5px 0;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #333;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: mediumspringgreen;
+    box-shadow: 0 0 0 3px rgba(46, 213, 115, 0.2);
+}
+
+.radio-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    width: 93%;
+    margin: 20px 0;
+    padding: 35px 30px;
+    background: rgba(26, 26, 26, 0.95);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 255, 127, 0.2);
+}
+
+.radio-button {
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.radio-button__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-button__label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 15px;
+    color: #f2f2f2;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+/* Style for left and right radio buttons */
+.radio-button:first-child,
+.radio-button:last-child {
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+
+/* Style for middle radio button */
+.radio-button:nth-child(2) {
+    justify-content: center;
+}
+
+.radio-button__custom {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+}
+
+.radio-button__input:checked + .radio-button__label .radio-button__custom {
+    background-color: mediumspringgreen;
+    border-color: transparent;
+    transform: scale(0.8);
+    box-shadow: 0 0 20px rgba(0, 250, 154, 0.5);
+}
+
+.radio-button__input:checked + .radio-button__label {
+    color: mediumspringgreen;
+}
+
+.radio-button__label:hover .radio-button__custom {
+    transform: scale(1.2);
+    border-color: mediumspringgreen;
+    box-shadow: 0 0 20px rgba(0, 250, 154, 0.5);
+}
+
+.button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0.6em 2em;
+    border: 3px solid mediumspringgreen;
+    border-radius: 0.25em;
+    color: mediumspringgreen;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 300ms, color 300ms, transform 300ms, box-shadow 300ms;
+    user-select: none;
+    margin-top: 20px;
+    background: rgba(0, 255, 127, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.3);
+}
+
+.button:hover {
+    color: #ffffff;
+    background: rgba(0, 255, 127, 0.2);
+    box-shadow: 0 0 25px rgba(0, 255, 127, 0.5);
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.2);
+}
+
+.button:focus-visible {
+    outline: 2px solid mediumspringgreen;
+    outline-offset: 2px;
+}
+
+.button.loading {
+    position: relative;
+    color: transparent;
+}
+
+.button.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top-color: mediumspringgreen;
+    border-radius: 50%;
+    animation: rotate 0.8s linear infinite;
+}
+
+.button.success {
+    animation: success-pulse 0.5s ease;
+}
+
+.output-area {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.output-area.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.output-area h2 {
+    margin-bottom: 10px;
+}
+
+.output-textarea {
+    resize: none;
+    overflow: auto;
+    width: 100%;
+    min-height: 200px;
+    padding: 10px;
+    font-family: monospace;
+    white-space: pre;
+    background: #333;
+    color: mediumspringgreen;
+    border: 1px solid #555;
+    border-radius: 4px;
+}
+
+.output-textarea::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.output-textarea::-webkit-scrollbar-track {
+    background: #232323;
+    border-radius: 4px;
+}
+
+.output-textarea::-webkit-scrollbar-thumb {
+    background: mediumspringgreen;
+    border-radius: 4px;
+    opacity: 0.7;
+}
+
+.output-textarea::-webkit-scrollbar-thumb:hover {
+    opacity: 1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 25px;
+    width: 100%;
+    position: relative;
+}
+
+.form-group label {
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    padding: 0 5px;
+    font-size: 0.8em;
+    background: #1a1a1a;
+    transition: all 0.2s ease;
+    z-index: 1;
+    color: white;
+}
+
+.form-group.error textarea,
+.form-group.error select {
+    border-color: #ff6b6b;
+    animation: shake 0.5s ease;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8em;
+    margin-top: 5px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.download-button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0.6em 2em;
+    border: 3px solid mediumspringgreen;
+    border-radius: 0.25em;
+    color: mediumspringgreen;
+    font-size: 1.2em;
+    font-weight: 600;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border 300ms, color 300ms, transform 300ms, box-shadow 300ms;
+    user-select: none;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    background: rgba(0, 255, 127, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.3);
+}
+
+.download-button:hover {
+    color: #ffffff;
+    background: rgba(0, 255, 127, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.5);
+}
+
+.download-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 10px rgba(0, 255, 127, 0.3);
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 26, 26, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.loading-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.random-color {
+    transition: color 0.3s ease;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes success-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
